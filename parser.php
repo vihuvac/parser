@@ -1,5 +1,7 @@
 <?php
 
+include(__DIR__ . '/lib/base.php');
+
 $ch = curl_init();
 
 $fileName = '/var/www/parser/parsed-files/articles.html';
@@ -64,26 +66,15 @@ foreach ($tags as $tag)
      *
      */
 	if (isset($articleTitle, $articleDesc, $imgSrc)) {
-		$conection = mysql_connect('localhost', 'dev', 'dev');
 
-		if (!$conection) {
-			die('Could not connect: ' . mysql_error());
-		} else {
-			mysql_select_db('parsing', $conection);
-
-			$query = "INSERT INTO articles (title, description, img_path) VALUES ('{$articleTitle}', '{$articleDesc}', '{$imgSrc}')";
-
-			mysql_query($query);
-
-			mysql_close($conection);
-		}
+		$stmt->execute();
 
 	} else {
 		var_dump($articleTitle, $articleDesc, $imgSrc);
 	}
+	/* End storing records into my DB */
 
 	$articleTitle = null;
 	$articleDesc = null;
 	$imgSrc = null;
-	/* End storing records into my DB */
 }

@@ -4,7 +4,7 @@ $conection = mysql_connect('localhost', 'dev', 'dev');
 mysql_select_db('parsing', $conection);
 
 $whatPar = "SELECT * FROM articles ORDER BY id ASC";
-$answerPar = mysql_query($whatPar, $conection) or die(mysql_error());
+$answerPar = mysql_query($whatPar, $conection) or die (mysql_error());
 $forwardPar = mysql_num_rows($answerPar);
 
 ?>

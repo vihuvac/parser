@@ -1,6 +1,16 @@
 <?php
 
 include(__DIR__ . '/lib/base.php');
+include(__DIR__ . '/classes/class.WpClient.php');
+include(__DIR__ . '/classes/class.Site.php');
+
+$site = new Site;
+//$site->setImageSearch(true);
+$site->setUsername('admin');
+$site->setPass('dev');
+$site->setWpUrl('http://wp.harrenmedia.dev');
+//$site->setInitialUrl('http://www.lonelyplanet.fr/destinations');
+$site->setName('local');
 
 $siteUrl = 'http://www.worldtravelguide.net';
 
@@ -67,17 +77,33 @@ foreach ($tags as $tag)
 	echo $tag->nodeValue . "<br />";
     
     /*
-     * Storing records into my DB
+     * Storing records into my DB or WP
      *
      */
 	if (isset($articleTitle, $articleDesc, $imgSrc)) {
 
-		$stmt->execute();
+		//$stmt->execute();
+		$client = WpClient::getInstance($site);
 
+		$descLength = strlen($articleDesc);
+
+		$article = array(
+			'title' => $articleTitle,
+			'category' => 'Travel',
+			'tags' => 'lolo, lala',
+			'content' => $articleDesc,
+			'image_url' => $imgSrc,
+			'post_excerpt' => substr($articleDesc, 0, $descLength-15) . '...'
+			);
+
+    	echo "\nPosting article";
+        $client->postArticle($article);
+        echo "\nFinished posting articles";
+		
 	} else {
 		var_dump($articleTitle, $articleDesc, $imgSrc);
 	}
-	/* End storing records into my DB */
+	/* End storing records */
 
 	$articleTitle = null;
 	$articleDesc = null;
@@ -110,5 +136,4 @@ function saveImage($imgUrl, $name) {
 	} else {
 		echo "The file {$fileName} already exists\n";
 	}
-    
 }

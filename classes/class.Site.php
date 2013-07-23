@@ -13,9 +13,7 @@ class Site
     var $imageSearch;
 
     function __construct()
-    {
-        
-    }
+    {}
 
     /**
      * @param String $username
@@ -89,8 +87,6 @@ class Site
         $this->baseImageslUrl = $url;
     }
 
-    
-
     /**
      * @param Category $category
      */
@@ -129,7 +125,9 @@ class Site
     public function loadCategories()
     {
         if (($handle = fopen("archives/{$this->getName()}/categories.csv", "r")) !== FALSE) {
+            
             $x = 1;
+
             while (($data = fgetcsv($handle, 1024, ",")) !== FALSE) {
                 $name = $data[0];
                 $tags = $data[1];
@@ -137,11 +135,13 @@ class Site
                 $title = $data[3];
                 $metaDesc = $data[4];
                 $parseDOM = false;
+
                 if (isset($data[5])) {
                     $parseDOM = $data[5];
                 }
                 
                 $imageUrl = null;
+
                 if($x <= 5 && $this->category->getImageUrl() != ''){
                     $imageUrl = $this->category->getImageUrl();
                 }
@@ -160,5 +160,4 @@ class Site
     {
         $this->imageSearch = $search;
     }
-
 }

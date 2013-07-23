@@ -12,7 +12,7 @@ $forwardPar = mysql_num_rows($answerPar);
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Print parsed contents from my DB</title>
+		<title>Print parsed contents saved in MySQL</title>
 		<style type="text/css">
 			body {
 				font-family: "Trebuchet MS", Tahoma, Verdana;

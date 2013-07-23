@@ -1,6 +1,6 @@
 <?php
 
-$dbh = 'mysql:dbname=parsing;host=guest-machine';
+$dbh	  = 'mysql:dbname=parsing;host=localhost';
 $username = 'dev';
 $password = 'dev';
 

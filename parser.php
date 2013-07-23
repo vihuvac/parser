@@ -14,7 +14,7 @@ $site->setName('local');
 
 $siteUrl = 'http://www.worldtravelguide.net';
 
-$fileParsed = '/var/www/parser/files-parsed/articles.html';
+$fileParsed = '/var/www/parser/file-parsed/articles.html';
 
 $ch = curl_init();
 

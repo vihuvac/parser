@@ -1,22 +1,10 @@
 <?php
 
-include(__DIR__ . '/lib/base.php');
-include(__DIR__ . '/classes/class.WpClient.php');
-include(__DIR__ . '/classes/class.Site.php');
+$ch = curl_init();
 
-$site = new Site;
-//$site->setImageSearch(true);
-$site->setUsername('admin');
-$site->setPass('dev');
-$site->setWpUrl('http://wp.harrenmedia.dev');
-//$site->setInitialUrl('http://www.lonelyplanet.fr/destinations');
-$site->setName('local');
+$fileName = '/var/www/parser/file-parsed/basicarticles.html';
 
 $siteUrl = 'http://www.worldtravelguide.net';
-
-$fileParsed = '/var/www/parser/file-parsed/articles.html';
-
-$ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, $siteUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -26,13 +14,14 @@ curl_setopt($ch, CURLOPT_REFERER, "http://google.com");
 curl_setopt($ch, CURLOPT_TIMEOUT, 400);
 
 $data = curl_exec($ch);
-file_put_contents($fileParsed, $data);
-curl_close($ch);
 
+file_put_contents($fileName, $data);
+
+curl_close($ch);
 
 $dom = new DOMDocument();
 @$dom->loadHTML($data);
- 
+
 $xpath = new DOMXPath($dom);
 
 $articleTitle = null;
@@ -48,26 +37,26 @@ foreach ($tags as $tag)
 	@$tagDom->loadHTML($tagHtml);
 
 	$tagXpath = new DOMXPath($tagDom);
-	
+
 	$titles = $tagXpath->query('//a[@class="topgap"] | //div[@class="block-link-title"]');
 
 	foreach ($titles as $title)
 	{
-	    $articleTitle = $title->nodeValue;
+		$articleTitle = $title->nodeValue;
 	}
 
 	$descs = $tagXpath->query('//p[@class="notop"]');
 
 	foreach ($descs as $desc)
 	{
-	    $articleDesc = $desc->nodeValue;
+		$articleDesc = $desc->nodeValue;
 	}
 
 	$imgs= $tagXpath->query('//a[@class="external"]/img | //a[@class="block-link"]/img');
 
 	foreach ($imgs as $img)
 	{
-	    $imgSrc = $img->attributes->getNamedItem("src")->nodeValue;
+		$imgSrc = $img->attributes->getNamedItem("src")->nodeValue;
 	}
 
 	$imgName = basename($imgSrc);
@@ -75,31 +64,26 @@ foreach ($tags as $tag)
 	saveImage($imgSrc, $imgName);
 
 	echo $tag->nodeValue . "<br />";
-    
-    /*
-     * Storing Records in MySQL or WP
-     *
-     */
+
+	/*
+	 * Storing Records in MySQL
+	 *
+	 */
 	if (isset($articleTitle, $articleDesc, $imgSrc)) {
+		$conection = mysql_connect('localhost', 'dev', 'dev');
 
-		//$stmt->execute();
-		$client = WpClient::getInstance($site);
+		if (!$conection) {
+			die('Could not connect: ' . mysql_error());
+		} else {
+			mysql_select_db('parsing', $conection);
 
-		$descLength = strlen($articleDesc);
+			$query = "INSERT INTO articles (title, description, img_path) VALUES ('{$articleTitle}', '{$articleDesc}', '{$imgSrc}')";
 
-		$article = array(
-			'title' => $articleTitle,
-			'category' => 'Travel',
-			'tags' => 'FirstTag, SecondTag, ThirdTag',
-			'content' => $articleDesc,
-			'image_url' => $imgSrc,
-			'post_excerpt' => substr($articleDesc, 0, $descLength-15) . '...'
-		);
+			mysql_query($query);
 
-    	echo "\nPosting article";
-        $client->postArticle($article);
-        echo "\nFinished posting articles";
-		
+			mysql_close($conection);
+		}
+
 	} else {
 		var_dump($articleTitle, $articleDesc, $imgSrc);
 	}
@@ -107,7 +91,7 @@ foreach ($tags as $tag)
 	$articleTitle = null;
 	$articleDesc = null;
 	$imgSrc = null;
-	
+
 	/* End Storing Records */
 }
 

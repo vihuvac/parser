@@ -9,10 +9,11 @@ $forwardPar = mysql_num_rows($answerPar);
 
 ?>
 
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Print parsed contents saved in MySQL</title>
+		<title>Loading Parsed Records &amp; Saved in MySQL</title>
 		<style type="text/css">
 			body {
 				font-family: "Trebuchet MS", Tahoma, Verdana;
@@ -39,7 +40,7 @@ $forwardPar = mysql_num_rows($answerPar);
 		</style>
 	</head>
 	<body>
-		<h2>Parsing Articles - My Custom Contenct</h2>
+		<h2>My Collection of Records</h2>
 		<?php 
 			if ($forwardPar > 0) {
 				while ($rowPar = mysql_fetch_assoc($answerPar)) {

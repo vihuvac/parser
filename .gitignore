@@ -1,2 +1,5 @@
 file-parsed/*
 imgs-parsed/*
+tests/*
+
+.DS_Store

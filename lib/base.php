@@ -1,8 +1,8 @@
 <?php
 
 $dbh	  = 'mysql:dbname=parsing;host=localhost';
-$username = 'dev';
-$password = 'dev';
+$username = 'parser';
+$password = 'parser';
 
 try {
     $gbd = new PDO($dbh, $username, $password);

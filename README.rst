@@ -14,6 +14,20 @@ This project comes with some basic and important files to parse a website, and t
 Getting Started
 ---------------
 
+If the database is not created yet, just run the script ready to create the whole database with its table.
+
+Bear in mind before executing this command, the root user credentials should be configured, the same should be set into the variables ``$root`` and ``$root_password``.
+
+In mi case, I got not password for the root user, so this variable should be empty, for example: ``$root_password="";``. In case of being a password for this user, just type the same inside the quotes.
+
+Go to the docs folder::
+
+	cd docs/
+
+Then run::
+
+	php builder.php
+
 Create storage directories::
 
     mkdir files-parsed

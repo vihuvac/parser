@@ -70,7 +70,7 @@ foreach ($tags as $tag)
 	 *
 	 */
 	if (isset($articleTitle, $articleDesc, $imgSrc)) {
-		$conection = mysql_connect('localhost', 'dev', 'dev');
+		$conection = mysql_connect('localhost', 'parser', 'parser');
 
 		if (!$conection) {
 			die('Could not connect: ' . mysql_error());

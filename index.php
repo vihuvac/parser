@@ -1,6 +1,6 @@
 <?php
 
-$conection = mysql_connect('localhost', 'dev', 'dev');
+$conection = mysql_connect('localhost', 'parser', 'parser');
 mysql_select_db('parsing', $conection);
 
 $whatPar = "SELECT * FROM articles ORDER BY id ASC";
